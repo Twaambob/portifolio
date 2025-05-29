@@ -382,17 +382,6 @@ section h2 {
   transform-origin: left;
 }
 
-/* Contact section */
-#contact {
-  text-align: center;
-}
-
-#contact p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: var(--text-primary);
-}
-
 #neural-background {
   position: fixed;
   top: 0;
