@@ -1,5 +1,5 @@
 // src/main.js
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './components/Navbar';
 import NeuralBackground from './components/NeuralBackground';
@@ -8,6 +8,31 @@ import ProfileImage from './components/ProfileImage';
 import Blog from './components/Blog';
 import Contact from './components/Contact';
 import './assets/styles/main.css';
+
+console.log('React application starting...');
+
+// Add error boundary
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('React Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div>Something went wrong. Please refresh the page.</div>;
+    }
+    return this.props.children;
+  }
+}
 
 const App = () => {
   return (
@@ -51,14 +76,25 @@ const App = () => {
   );
 };
 
-// Create root and render app
-const container = document.getElementById('root');
-if (!container) {
-  throw new Error('Failed to find the root element');
-}
-const root = createRoot(container);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Initialize React when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('root');
+  if (!container) {
+    console.error('Root element not found in the DOM');
+    return;
+  }
+  
+  try {
+    const root = createRoot(container);
+    root.render(
+      <StrictMode>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </StrictMode>
+    );
+    console.log('React application mounted successfully');
+  } catch (error) {
+    console.error('Failed to render React application:', error);
+  }
+});
