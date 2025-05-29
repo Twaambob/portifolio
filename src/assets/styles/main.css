@@ -106,9 +106,9 @@ nav a:hover::before {
 }
 
 section {
-  min-height: 100vh;
+  min-height: max(600px, 100vh);
   width: 100%;
-  padding: 4rem 1rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -117,6 +117,105 @@ section {
   margin: 0 auto;
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
+}
+
+section > * {
+  margin-bottom: 1.5rem;
+}
+
+section > *:last-child {
+  margin-bottom: 0;
+}
+
+.profile-image {
+  width: 200px;
+  height: 190px;
+  margin: 0 auto 1rem;
+  position: relative;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+}
+
+.profile-image::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+  filter: blur(10px);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--bg-dark);
+}
+
+.avatar-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+  transition: transform 0.3s ease;
+}
+
+.avatar-container:hover {
+  transform: translateY(-10px);
+}
+
+.avatar-placeholder {
+  animation: float 6s ease-in-out infinite;
+}
+
+.role-tag {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.avatar-container:hover .role-tag {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#home {
+  animation: fadeInUp 1s ease-out;
+}
+
+#home h1 {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 800;
+  margin: 0;
+  padding: 0 1rem;
+  width: 100%;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: fadeInUp 1s ease-out 0.3s both;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 section h2 {
@@ -126,7 +225,7 @@ section h2 {
   background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .greeting {
@@ -308,7 +407,7 @@ section h2 {
 .profile-image {
   width: 200px;
   height: 190px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1rem;
   position: relative;
   border-radius: 50%;
   padding: 5px;
@@ -338,7 +437,7 @@ section h2 {
   position: relative;
   width: 200px;
   height: 200px;
-  margin: 0 auto 3rem;
+  margin: 0 auto 2rem;
   transition: transform 0.3s ease;
 }
 
@@ -680,8 +779,8 @@ section h2 {
 /* Mobile Portrait (9:16) */
 @media screen and (max-aspect-ratio: 9/16) {
   section {
-    padding: 4rem 1rem 2rem 1rem;
-    min-height: 100svh;
+    padding: 2rem 1rem;
+    min-height: max(500px, 100svh);
   }
   
   .projects-grid {
@@ -852,6 +951,90 @@ section h2 {
   .post-meta {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 0.5rem;
+  }
+}
+
+/* Optimized spacing */
+section > * {
+  margin-bottom: 1.5rem;
+}
+
+section > *:last-child {
+  margin-bottom: 0;
+}
+
+.profile-image {
+  margin-bottom: 1rem;
+}
+
+.avatar-container {
+  margin-bottom: 2rem;
+}
+
+section h2 {
+  margin-bottom: 1.5rem;
+}
+
+.projects-grid,
+.blog-grid {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Mobile spacing adjustments */
+@media screen and (max-width: 480px) {
+  section {
+    gap: 1rem;
+    justify-content: flex-start;
+    padding-top: 4rem;
+  }
+
+  section > * {
+    margin-bottom: 1rem;
+  }
+
+  .profile-image {
+    margin-bottom: 0.5rem;
+  }
+
+  .avatar-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .skills {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .projects-grid,
+  .blog-grid {
+    gap: 1rem;
+  }
+
+  #home {
+    justify-content: center;
+  }
+}
+
+/* Compact layout for landscape */
+@media screen and (max-height: 600px) {
+  section {
+    padding: 1rem;
+    min-height: auto;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  section > * {
+    margin-bottom: 0.5rem;
+  }
+
+  .projects-grid,
+  .blog-grid {
     gap: 0.5rem;
   }
 }
