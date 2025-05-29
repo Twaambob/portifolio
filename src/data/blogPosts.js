@@ -1,12 +1,12 @@
 export const blogPosts = [
   {
-    title: "Building Neural Networks with React",
-    preview: "Explore how to create interactive neural network visualizations using React and WebGL. Learn about the mathematics behind neural networks and how to represent them visually in a web browser.",
-    category: "Web Development",
+    title: "The Evolution of AI in 2025",
+    preview: "Discover how AI has transformed software development in 2025. From advanced code generation to intelligent debugging, explore the tools and techniques reshaping how we build applications.",
+    category: "Artificial Intelligence",
     date: "May 29, 2025",
-    readTime: 5,
+    readTime: 7,
     image: "neural-net",
-    link: "#/blog/neural-networks-react"
+    link: "#/blog/ai-evolution-2025"
   },
   {
     title: "The Future of Web Development",
