@@ -1,0 +1,42 @@
+nav {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 1rem;
+  border-radius: 1rem;
+  animation: float var(--animation-speed) ease-in-out infinite;
+  z-index: 1000;
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  position: relative;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s;
+}
+
+nav a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    var(--neon-primary),
+    var(--neon-secondary),
+    var(--neon-primary)
+  );
+  border-radius: 0.5rem;
+  animation: rotation 10s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+nav a:hover::before {
+  opacity: 1;
+}
