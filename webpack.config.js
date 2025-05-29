@@ -27,10 +27,15 @@ module.exports = {
         type: 'asset/resource'
       }
     ]
-  },
-  plugins: [
+  },  plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/index.html')
+      template: path.resolve(__dirname, 'src/index.html'),
+      meta: {
+        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover',
+        'theme-color': '#080808',
+        'apple-mobile-web-app-capable': 'yes',
+        'mobile-web-app-capable': 'yes'
+      }
     })
   ]
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const defaultProjects = [
   {
@@ -28,18 +28,47 @@ const defaultProjects = [
 ];
 
 const ProjectsGrid = ({ projects = defaultProjects }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 480);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 480);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="projects-grid">
       {projects.map((project, index) => (
-        <div className="project-card" key={index}>
+        <div 
+          className="project-card" 
+          key={index}
+          style={{ 
+            animationDelay: `${index * 0.2}s`,
+            opacity: 0,
+            animation: 'fadeInUp 0.6s ease-out forwards'
+          }}
+        >
           <h3>{project.title}</h3>
           <p>{project.description}</p>
           <div className="technologies">
-            {project.technologies.map((tech, i) => (
+            {(isMobile ? project.technologies.slice(0, 2) : project.technologies).map((tech, i) => (
               <span key={i} className="tech-tag">{tech}</span>
             ))}
+            {isMobile && project.technologies.length > 2 && (
+              <span className="tech-tag">+{project.technologies.length - 2}</span>
+            )}
           </div>
-          <a href={project.link} target="_blank" rel="noopener noreferrer">View Project →</a>
+          <a 
+            href={project.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="view-project"
+          >
+            View Project <span className="arrow">→</span>
+          </a>
         </div>
       ))}
     </div>
