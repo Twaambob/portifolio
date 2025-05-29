@@ -560,7 +560,8 @@ section h2 {
 }
 
 .contact-container h2 {
-  margin-top: 2rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
   font-size: clamp(2rem, 5vw, 2.5rem);
   background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
   -webkit-background-clip: text;
@@ -575,7 +576,7 @@ section h2 {
   justify-content: center;
   flex-wrap: wrap;
   gap: clamp(1rem, 3vw, 2rem);
-  margin: clamp(1rem, 4vw, 2rem) 0;
+  margin: 0;
   padding: 0 1rem;
 }
 
@@ -929,5 +930,92 @@ section h2 {
   .projects-grid,
   .blog-grid {
     gap: 0.5rem;
+  }
+}
+
+/* Footer styles */
+.footer {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+
+.footer-content {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.copyright {
+  color: var(--text-primary);
+  opacity: 0.7;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--neon-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.footer-link:hover {
+  opacity: 1;
+  color: var(--neon-primary);
+}
+
+.footer-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media screen and (max-width: 480px) {
+  .footer {
+    padding: 1rem 0;
+    margin-top: 1rem;
+  }
+
+  .footer-content {
+    gap: 0.8rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
+  }
+}
+
+/* Tall Mobile Devices */
+@media screen and (min-aspect-ratio: 9/19.5) and (max-aspect-ratio: 10/19.5) {
+  .footer {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 }

@@ -7,6 +7,7 @@ import ProjectsGrid from './components/ProjectsGrid';
 import ProfileImage from './components/ProfileImage';
 import Blog from './components/Blog';
 import Contact from './components/Contact';
+import Footer from './components/Footer';
 import './assets/styles/main.css';
 
 console.log('React application starting...');
@@ -72,6 +73,7 @@ const App = () => {
           <Contact />
         </section>
       </main>
+      <Footer />
     </div>
   );
 };
