@@ -1,6 +1,7 @@
 // src/main.js
 import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Navbar from './components/Navbar';
 import NeuralBackground from './components/NeuralBackground';
 import ProjectsGrid from './components/ProjectsGrid';
@@ -92,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <StrictMode>
         <ErrorBoundary>
           <App />
+          <SpeedInsights />
         </ErrorBoundary>
       </StrictMode>
     );
