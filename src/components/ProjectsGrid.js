@@ -29,26 +29,55 @@ const defaultProjects = [
 
 const ProjectsGrid = ({ projects = defaultProjects }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 480);
+  const [visibleProjects, setVisibleProjects] = useState([]);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 480);
     };
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleProjects(prev => 
+              [...new Set([...prev, ...projects.slice(0, prev.length + 4)])]
+            );
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '100px',
+        threshold: 0.1
+      }
+    );
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    if (gridRef.current) {
+      observer.observe(gridRef.current);
+    }
+
+    // Initial load of first batch
+    setVisibleProjects(projects.slice(0, 4));
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (gridRef.current) {
+        observer.unobserve(gridRef.current);
+      }
+    };
+  }, [projects]);
 
   return (
-    <div className="projects-grid">
-      {projects.map((project, index) => (
+    <div className="projects-grid" ref={gridRef}>
+      {visibleProjects.map((project, index) => (
         <div 
-          className="project-card" 
-          key={index}
+          className="project-card fade-in" 
+          key={project.title}
           style={{ 
-            animationDelay: `${index * 0.2}s`,
-            opacity: 0,
-            animation: 'fadeInUp 0.6s ease-out forwards'
+            animationDelay: `${index * 0.2}s`
           }}
         >
           <h3>{project.title}</h3>
@@ -71,6 +100,9 @@ const ProjectsGrid = ({ projects = defaultProjects }) => {
           </a>
         </div>
       ))}
+      {visibleProjects.length < projects.length && (
+        <div className="loading-projects" />
+      )}
     </div>
   );
 };

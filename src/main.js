@@ -1,15 +1,30 @@
 // src/main.js
-import React, { StrictMode } from 'react';
+import React, { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import loadable from '@loadable/component';
 import Navbar from './components/Navbar';
-import NeuralBackground from './components/NeuralBackground';
-import ProjectsGrid from './components/ProjectsGrid';
-import ProfileImage from './components/ProfileImage';
-import Blog from './components/Blog';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import './assets/styles/main.css';
+
+// Lazy load components
+const NeuralBackground = loadable(() => import('./components/NeuralBackground'), {
+  fallback: null
+});
+const ProjectsGrid = loadable(() => import('./components/ProjectsGrid'), {
+  fallback: <div>Loading projects...</div>
+});
+const ProfileImage = loadable(() => import('./components/ProfileImage'), {
+  fallback: <div className="profile-image-placeholder"></div>
+});
+const Blog = loadable(() => import('./components/Blog'), {
+  fallback: <div>Loading blog posts...</div>
+});
+const Contact = loadable(() => import('./components/Contact'), {
+  fallback: <div>Loading contact information...</div>
+});
+const Footer = loadable(() => import('./components/Footer'), {
+  fallback: <div>Loading footer...</div>
+});
 
 console.log('React application starting...');
 
@@ -37,14 +52,47 @@ class ErrorBoundary extends React.Component {
 }
 
 const App = () => {
+  useEffect(() => {
+    // Preload critical components
+    const preloadComponents = async () => {
+      const componentsToPreload = [
+        () => import('./components/ProjectsGrid'),
+        () => import('./components/Blog'),
+        () => import('./components/Contact')
+      ];
+      
+      try {
+        await Promise.all(
+          componentsToPreload.map(loader => 
+            loader().then(module => {
+              // Component loaded successfully
+            }).catch(error => {
+              console.error('Error preloading component:', error);
+            })
+          )
+        );
+      } catch (error) {
+        console.error('Error in preloading components:', error);
+      }
+    };
+
+    // Start preloading after initial render
+    const timer = setTimeout(preloadComponents, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div>
-      <NeuralBackground />
+      <Suspense fallback={null}>
+        <NeuralBackground />
+      </Suspense>
       <Navbar />
       <main>
         <section id="home">
           <div className="profile-image">
-            <ProfileImage />
+            <Suspense fallback={<div className="profile-image-placeholder" />}>
+              <ProfileImage />
+            </Suspense>
           </div>
           <h1>TWAAMBO</h1>
         </section>
@@ -63,18 +111,26 @@ const App = () => {
         </section>
         <section id="projects">
           <h2>Projects</h2>
-          <ProjectsGrid />
+          <Suspense fallback={<div className="loading-projects">Loading projects...</div>}>
+            <ProjectsGrid />
+          </Suspense>
         </section>
         <section id="blog">
           <h2>Latest Blog Posts</h2>
-          <Blog />
+          <Suspense fallback={<div className="loading-blog">Loading blog posts...</div>}>
+            <Blog />
+          </Suspense>
         </section>
         <section id="contact">
           <h2>Contact</h2>
-          <Contact />
+          <Suspense fallback={<div className="loading-contact">Loading contact information...</div>}>
+            <Contact />
+          </Suspense>
         </section>
       </main>
-      <Footer />
+      <Suspense fallback={<div className="loading-footer">Loading footer...</div>}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };
