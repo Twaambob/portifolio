@@ -147,10 +147,21 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.8,
     }),
-  ],
-  devServer: {
+  ],  devServer: {
     hot: true,
     historyApiFallback: true,
     compress: true,
+    port: 3000,
+    open: true,
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false,
+      },
+      progress: true,
+    },
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
   },
 };

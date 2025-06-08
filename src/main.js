@@ -1,5 +1,5 @@
 // src/main.js
-import React, { StrictMode, Suspense } from 'react';
+import React, { StrictMode, Suspense, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import loadable from '@loadable/component';
@@ -28,11 +28,15 @@ const Footer = loadable(() => import('./components/Footer'), {
 
 console.log('React application starting...');
 
-// Add error boundary
+// Error Boundary Component with improved error handling
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null
+    };
   }
 
   static getDerivedStateFromError(error) {
@@ -40,97 +44,143 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    });
     console.error('React Error:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      return <div>Something went wrong. Please refresh the page.</div>;
+      return (
+        <div className="error-boundary" style={{
+          padding: '20px',
+          margin: '20px',
+          border: '1px solid #ff0000',
+          borderRadius: '4px',
+          background: 'rgba(255, 0, 0, 0.1)'
+        }}>
+          <h2>Something went wrong</h2>
+          {process.env.NODE_ENV === 'development' && (
+            <details style={{ whiteSpace: 'pre-wrap' }}>
+              {this.state.error && this.state.error.toString()}
+              <br />
+              {this.state.errorInfo && this.state.errorInfo.componentStack}
+            </details>
+          )}
+          <button 
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '8px 16px',
+              marginTop: '10px',
+              border: 'none',
+              borderRadius: '4px',
+              background: '#00f7ff',
+              cursor: 'pointer'
+            }}
+          >
+            Reload Page
+          </button>
+        </div>
+      );
     }
     return this.props.children;
   }
 }
 
+// App Component with proper error boundaries and suspense
 const App = () => {
   useEffect(() => {
     // Preload critical components
     const preloadComponents = async () => {
-      const componentsToPreload = [
-        () => import('./components/ProjectsGrid'),
-        () => import('./components/Blog'),
-        () => import('./components/Contact')
-      ];
-      
       try {
-        await Promise.all(
-          componentsToPreload.map(loader => 
-            loader().then(module => {
-              // Component loaded successfully
-            }).catch(error => {
-              console.error('Error preloading component:', error);
-            })
-          )
-        );
+        await Promise.all([
+          import('./components/ProjectsGrid'),
+          import('./components/Blog'),
+          import('./components/Contact')
+        ]);
       } catch (error) {
-        console.error('Error in preloading components:', error);
+        console.error('Error preloading components:', error);
       }
     };
 
-    // Start preloading after initial render
-    const timer = setTimeout(preloadComponents, 1000);
-    return () => clearTimeout(timer);
+    preloadComponents();
   }, []);
 
   return (
     <div>
-      <Suspense fallback={null}>
-        <NeuralBackground />
-      </Suspense>
-      <Navbar />
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <NeuralBackground />
+        </Suspense>
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <Navbar />
+      </ErrorBoundary>
+
       <main>
-        <section id="home">
-          <div className="profile-image">
-            <Suspense fallback={<div className="profile-image-placeholder" />}>
-              <ProfileImage />
+        <ErrorBoundary>
+          <section id="home">
+            <div className="profile-image">
+              <Suspense fallback={<div className="profile-image-placeholder" />}>
+                <ProfileImage />
+              </Suspense>
+            </div>
+            <h1>TWAAMBO</h1>
+          </section>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <section id="about">
+            <h2>About Me</h2>
+            <p>I'm a passionate full-stack developer with expertise in modern web technologies.</p>
+            <p>Specializing in building innovative and responsive web applications using React, Node.js, and cutting-edge tools.</p>
+            <div className="skills">
+              <h3>Skills</h3>
+              <ul>
+                <li>Frontend: React, JavaScript, HTML5, CSS3</li>
+                <li>Backend: Node.js, Python</li>
+                <li>Tools: Git, Webpack, VS Code</li>
+              </ul>
+            </div>
+          </section>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <section id="projects">
+            <h2>Projects</h2>
+            <Suspense fallback={<div className="loading-projects">Loading projects...</div>}>
+              <ProjectsGrid />
             </Suspense>
-          </div>
-          <h1>TWAAMBO</h1>
-        </section>
-        <section id="about">
-          <h2>About Me</h2>
-          <p>I'm a passionate full-stack developer with expertise in modern web technologies.</p>
-          <p>Specializing in building innovative and responsive web applications using React, Node.js, and cutting-edge tools.</p>
-          <div className="skills">
-            <h3>Skills</h3>
-            <ul>
-              <li>Frontend: React, JavaScript, HTML5, CSS3</li>
-              <li>Backend: Node.js, Python</li>
-              <li>Tools: Git, Webpack, VS Code</li>
-            </ul>
-          </div>
-        </section>
-        <section id="projects">
-          <h2>Projects</h2>
-          <Suspense fallback={<div className="loading-projects">Loading projects...</div>}>
-            <ProjectsGrid />
-          </Suspense>
-        </section>
-        <section id="blog">
-          <h2>Latest Blog Posts</h2>
-          <Suspense fallback={<div className="loading-blog">Loading blog posts...</div>}>
-            <Blog />
-          </Suspense>
-        </section>
-        <section id="contact">
-          <h2>Contact</h2>
-          <Suspense fallback={<div className="loading-contact">Loading contact information...</div>}>
-            <Contact />
-          </Suspense>
-        </section>
+          </section>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <section id="blog">
+            <h2>Latest Blog Posts</h2>
+            <Suspense fallback={<div className="loading-blog">Loading blog posts...</div>}>
+              <Blog />
+            </Suspense>
+          </section>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <section id="contact">
+            <h2>Contact</h2>
+            <Suspense fallback={<div className="loading-contact">Loading contact information...</div>}>
+              <Contact />
+            </Suspense>
+          </section>
+        </ErrorBoundary>
       </main>
-      <Suspense fallback={<div className="loading-footer">Loading footer...</div>}>
-        <Footer />
-      </Suspense>
+
+      <ErrorBoundary>
+        <Suspense fallback={<div className="loading-footer">Loading footer...</div>}>
+          <Footer />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };
