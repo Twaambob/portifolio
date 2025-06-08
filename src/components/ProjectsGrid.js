@@ -82,14 +82,32 @@ const ProjectsGrid = ({ projects = defaultProjects }) => {
           className="project-card fade-in" 
           key={project.title}
           style={{ 
-            animationDelay: `${index * 0.2}s`
+            animationDelay: `${index * 0.2}s`,
+            backgroundColor: 'rgba(8, 8, 8, 0.8)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(0, 247, 255, 0.1)',
+            borderRadius: '12px',
+            padding: '20px',
+            transition: 'all 0.3s ease'
           }}
         >
-          <h3>{project.title}</h3>
-          <p>{project.description}</p>
+          <h3 style={{ color: 'var(--neon-primary)' }}>{project.title}</h3>
+          <p style={{ color: 'var(--text-primary)' }}>{project.description}</p>
           <div className="technologies">
             {(isMobile ? project.technologies.slice(0, 2) : project.technologies).map((tech, i) => (
-              <span key={i} className="tech-tag">{tech}</span>
+              <span 
+                key={i} 
+                className="tech-tag"
+                style={{
+                  backgroundColor: 'rgba(123, 47, 247, 0.3)',
+                  color: 'var(--neon-primary)',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '0.9em'
+                }}
+              >
+                {tech}
+              </span>
             ))}
             {isMobile && project.technologies.length > 2 && (
               <span className="tech-tag">+{project.technologies.length - 2}</span>
@@ -100,6 +118,13 @@ const ProjectsGrid = ({ projects = defaultProjects }) => {
             target="_blank" 
             rel="noopener noreferrer"
             className="view-project"
+            style={{
+              color: 'var(--neon-primary)',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
           >
             View Project <span className="arrow">→</span>
           </a>

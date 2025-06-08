@@ -114,57 +114,40 @@ const NeuralBackground = () => {
               ctx.beginPath();
               ctx.moveTo(particle.x, particle.y);
               ctx.lineTo(other.x, other.y);
-              ctx.strokeStyle = `rgba(0, 247, 255, ${1 - distance / 100})`;
+              ctx.strokeStyle = `rgba(0, 247, 255, ${1 - distance / 100})`; // Neon blue with distance-based opacity
+              ctx.lineWidth = 1;
               ctx.stroke();
+              ctx.closePath();
             }
           }
         }
       }
 
-      const initCanvas = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        if (networkRef.current) {
-          networkRef.current.init();
-        }
-      };
-
-      window.addEventListener('resize', initCanvas);
-      initCanvas();
-
+      // Start the animation
       const network = new NeuralNetwork();
-      networkRef.current = network;
       network.animate();
 
-      return () => {
-        window.removeEventListener('resize', initCanvas);
-        if (networkRef.current) {
-          networkRef.current.stop();
-        }
-      };
+      // Cleanup on unmount
+      return () => network.stop();
     } catch (error) {
       console.error('Neural background initialization error:', error);
       setError(error.message);
     }
   }, []);
 
-  if (error) {
-    return null; // Gracefully fail by not rendering anything
-  }
-
   return (
-    <canvas 
-      ref={canvasRef} 
-      style={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        zIndex: -1, 
-        opacity: 0.2,
-        willChange: 'transform' // Optimize for animations
-      }} 
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+        backgroundColor: 'var(--bg-dark)',
+        opacity: 0.6
+      }}
     />
   );
 };
