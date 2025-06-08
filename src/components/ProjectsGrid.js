@@ -1,29 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+// Default projects data
 const defaultProjects = [
   {
     title: "Portfolio Website",
     description: "A modern portfolio website built with React and Neural Network background animations",
     link: "#",
-    technologies: ["React", "JavaScript", "CSS3"]
+    technologies: ["React", "JavaScript", "CSS3"],
+    image: "portfolio-preview.jpg"
   },
   {
     title: "E-commerce Platform",
     description: "Full-stack e-commerce solution with real-time inventory management",
     link: "#",
-    technologies: ["Node.js", "MongoDB", "Express"]
+    technologies: ["Node.js", "MongoDB", "Express"],
+    image: "ecommerce-preview.jpg"
   },
   {
     title: "Weather Dashboard",
     description: "Real-time weather tracking app with interactive maps",
     link: "#",
-    technologies: ["React", "Weather API", "Mapbox"]
+    technologies: ["React", "Weather API", "Mapbox"],
+    image: "weather-preview.jpg"
   },
   {
     title: "Task Management App",
     description: "Collaborative task management tool with real-time updates",
     link: "#",
-    technologies: ["React", "Firebase", "Material-UI"]
+    technologies: ["React", "Firebase", "Material-UI"],
+    image: "task-preview.jpg"
   }
 ];
 

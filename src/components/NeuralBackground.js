@@ -5,6 +5,21 @@ const NeuralBackground = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const updateCanvasSize = () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    };
+
+    window.addEventListener('resize', updateCanvasSize);
+    updateCanvasSize();
+
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, []);
+
+  useEffect(() => {
     try {
       const canvas = canvasRef.current;
       if (!canvas) {
