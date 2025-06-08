@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Sitemap location
-Sitemap: https://twaambob.github.io/highers/sitemap.xml
-
-# Optimize crawling
-Crawl-delay: 10
