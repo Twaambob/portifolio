@@ -50,6 +50,5 @@ const BlogPost = memo(({ post, style }) => {
   // Only re-render if the post content changes
   return prevProps.post.title === nextProps.post.title;
 });
-};
 
 export default BlogPost;
