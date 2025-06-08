@@ -153,7 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
         </ErrorBoundary>
       </StrictMode>
     );
-    console.log('React application mounted successfully');
+
+    // Report web vitals
+    import('./utils/webVitals').then(({ default: reportWebVitals }) => {
+      reportWebVitals(({ name, value, id }) => {
+        console.log(`Web Vital: ${name} = ${value}`);
+        // You can send these metrics to your analytics service
+      });
+    });
   } catch (error) {
     console.error('Failed to render React application:', error);
   }

@@ -15,16 +15,21 @@ module.exports = {
     chunkFilename: '[name].[contenthash].chunk.js',
     publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
     clean: true
-  },
-  optimization: {
+  },  optimization: {
     minimize: process.env.NODE_ENV === 'production',
     minimizer: [
       new TerserPlugin({
         terserOptions: {
           compress: {
-            drop_console: true,
+            drop_console: false, // Keep console logs for debugging
+            pure_funcs: ['console.info', 'console.debug'], // Only remove non-critical console functions
+          },
+          mangle: true,
+          output: {
+            comments: false,
           },
         },
+        extractComments: false,
       }),
       new CssMinimizerPlugin(),
     ],
