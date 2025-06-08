@@ -8,14 +8,13 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  entry: './src/main.js',
-  output: {
+  entry: './src/main.js',  output: {
     path: path.resolve(__dirname, 'public'),
     filename: '[name].[contenthash].js',
     chunkFilename: '[name].[contenthash].chunk.js',
-    publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+    publicPath: '/',
     clean: true
-  },  optimization: {
+  },optimization: {
     minimize: process.env.NODE_ENV === 'production',
     minimizer: [
       new TerserPlugin({
